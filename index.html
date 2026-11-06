@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Multi-Format Text & Variable Case Converter | 100% Client-Side Developer Tool</title>
+  <meta name="description" content="Instantly convert text and code variables into camelCase, PascalCase, snake_case, kebab-case, CONSTANT_CASE, dot.case, Title Case, and URL slugs simultaneously. 100% private in-browser tool.">
+  <meta name="keywords" content="case converter, camelCase converter, snake_case generator, kebab-case maker, title case tool, pascal case converter, programming variable naming, developer text tool">
+  <link rel="canonical" href="https://greentools-dev.github.io/case-converter-pro/">
+  <meta property="og:title" content="Multi-Format Text & Variable Case Converter">
+  <meta property="og:description" content="Simultaneous variable and string case converter with 1-click copy. Zero cloud latency.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://greentools-dev.github.io/case-converter-pro/">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'system-ui', '-apple-system', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          colors: {
+            brand: {
+              50: '#ecfdf5',
+              100: '#d1fae5',
+              500: '#10b981',
+              600: '#059669',
+              700: '#047857',
+              900: '#064e3b',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      background-color: #f8fafc;
+      background-image: 
+        linear-gradient(to right, rgba(15, 23, 42, 0.04) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(15, 23, 42, 0.04) 1px, transparent 1px);
+      background-size: 28px 28px;
+    }
+  </style>
+
+  <!-- Structured Data JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebApplication",
+        "name": "Multi-Format Text & Variable Case Converter",
+        "url": "https://greentools-dev.github.io/case-converter-pro/",
+        "applicationCategory": "DeveloperApplication",
+        "operatingSystem": "All",
+        "browserRequirements": "Requires JavaScript. Requires HTML5.",
+        "description": "Deterministic multi-case text transformer. Converts identifiers between camelCase, snake_case, kebab-case, PascalCase, CONSTANT_CASE, and URL slugs in real-time.",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        }
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Why not use an AI model for variable case conversions?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Waiting for an AI round-trip takes several seconds and breaks developer flow. A dedicated client-side tokenizer runs in sub-millisecond real time as you type."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How does the tokenizer handle mixed separators and acronyms?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "The tokenizer splits words across underscores, hyphens, spaces, periods, and camelCase boundaries (like 'getUserHTTPResponse' into 'get', 'user', 'HTTP', 'response')."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Does this tool collect code snippets or variable names?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. All text tokenization occurs strictly inside your browser memory. Nothing is ever sent to an external server or telemetry service."
+            }
+          }
+        ]
+      }
+    ]
+  </script>
+</head>
+<body class="min-h-screen flex flex-col font-sans text-slate-800 antialiased selection:bg-brand-100 selection:text-brand-900">
+
+  <!-- Header -->
+  <header class="border-b border-slate-200/80 bg-white/90 backdrop-blur-md sticky top-0 z-40">
+    <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-xl bg-emerald-600 text-white flex items-center justify-center shadow-sm shadow-emerald-500/20">
+          <i data-lucide="type" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <span class="font-extrabold text-slate-900 tracking-tight text-lg">GreenTools<span class="text-emerald-600">.dev</span></span>
+          <span class="hidden sm:inline-block ml-2 text-xs font-semibold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200/60">Case Converter Pro</span>
+        </div>
+      </div>
+      <div class="flex items-center gap-3">
+        <span class="inline-flex items-center gap-1.5 text-xs font-medium text-slate-600 bg-slate-100/80 px-2.5 py-1 rounded-md border border-slate-200">
+          <i data-lucide="shield-check" class="w-3.5 h-3.5 text-emerald-600"></i>
+          100% Client-Side Safe
+        </span>
+        <a href="https://github.com/greentools-dev/case-converter-pro" target="_blank" rel="noopener noreferrer" class="text-slate-500 hover:text-slate-900 transition-colors p-1.5">
+          <i data-lucide="github" class="w-5 h-5"></i>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero & Primary Container -->
+  <main class="flex-1 max-w-6xl w-full mx-auto px-4 py-8 md:py-12 flex flex-col">
+    <div class="text-center max-w-2xl mx-auto mb-8">
+      <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
+        Multi-Format Case Converter Pro
+      </h1>
+      <p class="mt-3 text-slate-600 text-sm sm:text-base leading-relaxed">
+        Type or paste any identifier, headline, or phrase. Simultaneously transforms your text into 8 essential programming conventions and formatting styles in real time.
+      </p>
+    </div>
+
+    <!-- Input Card -->
+    <div class="bg-white rounded-2xl border border-slate-200/90 shadow-sm p-5 sm:p-6 mb-8 flex flex-col gap-4">
+      <div class="flex items-center justify-between">
+        <label for="text-input" class="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center gap-2">
+          <i data-lucide="pen-tool" class="w-3.5 h-3.5 text-emerald-600"></i>
+          Input Text / Identifier
+        </label>
+        <div class="flex items-center gap-3 text-xs font-mono text-slate-400">
+          <span id="stat-words">0 words</span>
+          <span>&bull;</span>
+          <span id="stat-chars">0 characters</span>
+        </div>
+      </div>
+
+      <div class="relative">
+        <input type="text" id="text-input" autofocus placeholder="Type or paste text here... e.g. user authentication token api" class="w-full px-4 py-3.5 text-base sm:text-lg font-mono text-slate-900 bg-slate-50/70 rounded-xl border border-slate-300 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all placeholder:text-slate-400">
+      </div>
+
+      <!-- Quick Preset Samples -->
+      <div class="flex items-center justify-between gap-3 text-xs pt-1 flex-wrap">
+        <div class="flex items-center gap-2 flex-wrap">
+          <span class="text-slate-400 font-medium">Quick Examples:</span>
+          <button type="button" class="preset-btn px-2.5 py-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 font-mono transition-colors" data-val="user authentication token">user authentication token</button>
+          <button type="button" class="preset-btn px-2.5 py-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 font-mono transition-colors" data-val="fetch_active_stripe_subscriptions">fetch_active_stripe_subscriptions</button>
+          <button type="button" class="preset-btn px-2.5 py-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 font-mono transition-colors" data-val="create-react-app-production-build">create-react-app-production-build</button>
+        </div>
+        <button type="button" id="btn-clear" class="px-2.5 py-1 rounded hover:bg-red-50 text-red-600 font-medium transition-colors">
+          Clear
+        </button>
+      </div>
+    </div>
+
+    <!-- Simultaneous 8-Format Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      
+      <!-- 1. camelCase -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm flex flex-col justify-between hover:border-emerald-300 transition-colors group">
+        <div>
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs font-bold text-slate-900 uppercase tracking-wider">camelCase</span>
+            <span class="text-[10px] font-semibold px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200/60">JS / TS</span>
+          </div>
+          <div id="out-camel" class="p-2.5 rounded-lg bg-slate-50 font-mono text-xs sm:text-sm text-slate-800 break-all select-all min-h-[44px] flex items-center">
+            userAuthenticationToken
+          </div>
+        </div>
+        <button type="button" class="btn-copy-card mt-3 w-full py-1.5 px-3 rounded-lg border border-slate-200 hover:bg-slate-50 text-xs font-semibold text-slate-700 transition-colors flex items-center justify-center gap-1.5 shadow-2xs" data-target="out-camel">
+          <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+          <span>Copy</span>
+        </button>
+      </div>
+
+      <!-- 2. PascalCase -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm flex flex-col justify-between hover:border-emerald-300 transition-colors group">
+        <div>
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs font-bold text-slate-900 uppercase tracking-wider">PascalCase</span>
+            <span class="text-[10px] font-semibold px-2 py-0.5 rounded bg-blue-50 text-blue-700 border border-blue-200/60">Classes / React</span>
+          </div>
+          <div id="out-pascal" class="p-2.5 rounded-lg bg-slate-50 font-mono text-xs sm:text-sm text-slate-800 break-all select-all min-h-[44px] flex items-center">
+            UserAuthenticationToken
+          </div>
+        </div>
+        <button type="button" class="btn-copy-card mt-3 w-full py-1.5 px-3 rounded-lg border border-slate-200 hover:bg-slate-50 text-xs font-semibold text-slate-700 transition-colors flex items-center justify-center gap-1.5 shadow-2xs" data-target="out-pascal">
+          <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+          <span>Copy</span>
+        </button>
+      </div>
+
+      <!-- 3. snake_case -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm flex flex-col justify-between hover:border-emerald-300 transition-colors group">
+        <div>
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs font-bold text-slate-900 uppercase tracking-wider">snake_case</span>
+            <span class="text-[10px] font-semibold px-2 py-0.5 rounded bg-amber-50 text-amber-700 border border-amber-200/60">Python / SQL</span>
+          </div>
+          <div id="out-snake" class="p-2.5 rounded-lg bg-slate-50 font-mono text-xs sm:text-sm text-slate-800 break-all select-all min-h-[44px] flex items-center">
+            user_authentication_token
+          </div>
+        </div>
+        <button type="button" class="btn-copy-card mt-3 w-full py-1.5 px-3 rounded-lg border border-slate-200 hover:bg-slate-50 text-xs font-semibold text-slate-700 transition-colors flex items-center justify-center gap-1.5 shadow-2xs" data-target="out-snake">
+          <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+          <span>Copy</span>
+        </button>
+      </div>
+
+      <!-- 4. kebab-case -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm flex flex-col justify-between hover:border-emerald-300 transition-colors group">
+        <div>
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs font-bold text-slate-900 uppercase tracking-wider">kebab-case</span>
+            <span class="text-[10px] font-semibold px-2 py-0.5 rounded bg-purple-50 text-purple-700 border border-purple-200/60">CSS / URLs</span>
+          </div>
+          <div id="out-kebab" class="p-2.5 rounded-lg bg-slate-50 font-mono text-xs sm:text-sm text-slate-800 break-all select-all min-h-[44px] flex items-center">
+            user-authentication-token
+          </div>
+        </div>
+        <button type="button" class="btn-copy-card mt-3 w-full py-1.5 px-3 rounded-lg border border-slate-200 hover:bg-slate-50 text-xs font-semibold text-slate-700 transition-colors flex items-center justify-center gap-1.5 shadow-2xs" data-target="out-kebab">
+          <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+          <span>Copy</span>
+        </button>
+      </div>
+
+      <!-- 5. CONSTANT_CASE -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm flex flex-col justify-between hover:border-emerald-300 transition-colors group">
+        <div>
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs font-bold text-slate-900 uppercase tracking-wider">CONSTANT_CASE</span>
+            <span class="text-[10px] font-semibold px-2 py-0.5 rounded bg-rose-50 text-rose-700 border border-rose-200/60">Env / Constants</span>
+          </div>
+          <div id="out-constant" class="p-2.5 rounded-lg bg-slate-50 font-mono text-xs sm:text-sm text-slate-800 break-all select-all min-h-[44px] flex items-center">
+            USER_AUTHENTICATION_TOKEN
+          </div>
+        </div>
+        <button type="button" class="btn-copy-card mt-3 w-full py-1.5 px-3 rounded-lg border border-slate-200 hover:bg-slate-50 text-xs font-semibold text-slate-700 transition-colors flex items-center justify-center gap-1.5 shadow-2xs" data-target="out-constant">
+          <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+          <span>Copy</span>
+        </button>
+      </div>
+
+      <!-- 6. dot.case -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm flex flex-col justify-between hover:border-emerald-300 transition-colors group">
+        <div>
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs font-bold text-slate-900 uppercase tracking-wider">dot.case</span>
+            <span class="text-[10px] font-semibold px-2 py-0.5 rounded bg-cyan-50 text-cyan-700 border border-cyan-200/60">Config / Keys</span>
+          </div>
+          <div id="out-dot" class="p-2.5 rounded-lg bg-slate-50 font-mono text-xs sm:text-sm text-slate-800 break-all select-all min-h-[44px] flex items-center">
+            user.authentication.token
+          </div>
+        </div>
+        <button type="button" class="btn-copy-card mt-3 w-full py-1.5 px-3 rounded-lg border border-slate-200 hover:bg-slate-50 text-xs font-semibold text-slate-700 transition-colors flex items-center justify-center gap-1.5 shadow-2xs" data-target="out-dot">
+          <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+          <span>Copy</span>
+        </button>
+      </div>
+
+      <!-- 7. Title Case -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm flex flex-col justify-between hover:border-emerald-300 transition-colors group">
+        <div>
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs font-bold text-slate-900 uppercase tracking-wider">Title Case</span>
+            <span class="text-[10px] font-semibold px-2 py-0.5 rounded bg-indigo-50 text-indigo-700 border border-indigo-200/60">Headlines</span>
+          </div>
+          <div id="out-title" class="p-2.5 rounded-lg bg-slate-50 font-sans text-xs sm:text-sm font-semibold text-slate-800 break-all select-all min-h-[44px] flex items-center">
+            User Authentication Token
+          </div>
+        </div>
+        <button type="button" class="btn-copy-card mt-3 w-full py-1.5 px-3 rounded-lg border border-slate-200 hover:bg-slate-50 text-xs font-semibold text-slate-700 transition-colors flex items-center justify-center gap-1.5 shadow-2xs" data-target="out-title">
+          <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+          <span>Copy</span>
+        </button>
+      </div>
+
+      <!-- 8. clean-url-slug -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm flex flex-col justify-between hover:border-emerald-300 transition-colors group">
+        <div>
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs font-bold text-slate-900 uppercase tracking-wider">clean-url-slug</span>
+            <span class="text-[10px] font-semibold px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200/60">SEO / Permalinks</span>
+          </div>
+          <div id="out-slug" class="p-2.5 rounded-lg bg-slate-50 font-mono text-xs sm:text-sm text-slate-800 break-all select-all min-h-[44px] flex items-center">
+            user-authentication-token
+          </div>
+        </div>
+        <button type="button" class="btn-copy-card mt-3 w-full py-1.5 px-3 rounded-lg border border-slate-200 hover:bg-slate-50 text-xs font-semibold text-slate-700 transition-colors flex items-center justify-center gap-1.5 shadow-2xs" data-target="out-slug">
+          <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+          <span>Copy</span>
+        </button>
+      </div>
+
+    </div>
+
+    <!-- Sponsor Slot -->
+    <aside id="sponsor-slot" class="mt-8 p-4 rounded-xl border border-dashed border-slate-300 bg-white text-center text-xs text-slate-500">
+      <span class="font-semibold text-slate-600 uppercase tracking-wider text-[11px] block mb-1">Sponsored</span>
+      Supercharge your coding workflows and TypeScript string utilities with GreenTools Pro.
+    </aside>
+
+    <!-- FAQ & Guide -->
+    <section class="mt-12 bg-white rounded-2xl border border-slate-200/80 p-6 sm:p-8 shadow-sm">
+      <h2 class="text-xl font-bold text-slate-900 mb-6 flex items-center gap-2">
+        <i data-lucide="help-circle" class="w-5 h-5 text-emerald-600"></i>
+        Variable Naming Guide & Frequently Asked Questions
+      </h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm text-slate-600">
+        <div>
+          <h3 class="font-semibold text-slate-800 mb-1">When should I use camelCase vs snake_case?</h3>
+          <p class="leading-relaxed">
+            In JavaScript, TypeScript, and Java, variables and function names follow <code>camelCase</code>. In Python, Ruby, and SQL relational databases, identifiers, column names, and methods conventionally use <code>snake_case</code>.
+          </p>
+        </div>
+        <div>
+          <h3 class="font-semibold text-slate-800 mb-1">How does the slugifier handle diacritics and accents?</h3>
+          <p class="leading-relaxed">
+            Foreign language characters with accents (like <code>é, ö, à, ñ</code>) are decomposed and normalized into standard ASCII equivalents (<code>e, o, a, n</code>) before non-alphanumeric symbols are stripped for clean URL permalinks.
+          </p>
+        </div>
+        <div>
+          <h3 class="font-semibold text-slate-800 mb-1">What does CONSTANT_CASE signify?</h3>
+          <p class="leading-relaxed">
+            Also known as SCREAMING_SNAKE_CASE or MACRO_CASE, this convention is used across C++, Python, Node.js, and Java for immutable environment variables, constants, and global config flags.
+          </p>
+        </div>
+        <div>
+          <h3 class="font-semibold text-slate-800 mb-1">Is this tool private?</h3>
+          <p class="leading-relaxed">
+            Yes. All string operations and regex tokenizations run 100% locally in your browser session. Your proprietary code names and text strings never leave your device.
+          </p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-slate-200 bg-white mt-12 py-8">
+    <div class="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
+      <div class="flex items-center gap-2">
+        <span class="font-bold text-slate-800">GreenTools.dev</span>
+        <span>&bull;</span>
+        <span>100% Client-Side Web Utilities</span>
+      </div>
+      <div>
+        Developer Utilities &bull; Zero Server Analytics
+      </div>
+    </div>
+  </footer>
+
+  <!-- Script Logic -->
+  <script>
+    lucide.createIcons();
+
+    // DOM Elements
+    const textInput = document.getElementById('text-input');
+    const statWords = document.getElementById('stat-words');
+    const statChars = document.getElementById('stat-chars');
+    const btnClear = document.getElementById('btn-clear');
+
+    const outCamel = document.getElementById('out-camel');
+    const outPascal = document.getElementById('out-pascal');
+    const outSnake = document.getElementById('out-snake');
+    const outKebab = document.getElementById('out-kebab');
+    const outConstant = document.getElementById('out-constant');
+    const outDot = document.getElementById('out-dot');
+    const outTitle = document.getElementById('out-title');
+    const outSlug = document.getElementById('out-slug');
+
+    // Tokenizer: Splits text on spaces, underscores, hyphens, periods, or camelCase transitions
+    function tokenize(input) {
+      if (!input || input.trim() === '') return [];
+
+      // Normalize diacritics
+      let str = input.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+
+      // Insert space before capital letters in camelCase / PascalCase words
+      // e.g. "userAuthToken" -> "user Auth Token"
+      // e.g. "getHTTPResponse" -> "get HTTP Response"
+      str = str.replace(/([a-z0-9])([A-Z])/g, '$1 $2');
+      str = str.replace(/([A-Z]+)([A-Z][a-z0-9])/g, '$1 $2');
+
+      // Replace delimiters (-, _, ., /, \) with spaces
+      str = str.replace(/[-_.\/\\:\+]/g, ' ');
+
+      // Split into words and filter empty
+      return str.trim().split(/\s+/).filter(w => w.length > 0);
+    }
+
+    // Transformations
+    function toCamelCase(words) {
+      if (words.length === 0) return '';
+      return words.map((w, i) => {
+        const lower = w.toLowerCase();
+        return i === 0 ? lower : lower.charAt(0).toUpperCase() + lower.slice(1);
+      }).join('');
+    }
+
+    function toPascalCase(words) {
+      if (words.length === 0) return '';
+      return words.map(w => {
+        const lower = w.toLowerCase();
+        return lower.charAt(0).toUpperCase() + lower.slice(1);
+      }).join('');
+    }
+
+    function toSnakeCase(words) {
+      if (words.length === 0) return '';
+      return words.map(w => w.toLowerCase()).join('_');
+    }
+
+    function toKebabCase(words) {
+      if (words.length === 0) return '';
+      return words.map(w => w.toLowerCase()).join('-');
+    }
+
+    function toConstantCase(words) {
+      if (words.length === 0) return '';
+      return words.map(w => w.toUpperCase()).join('_');
+    }
+
+    function toDotCase(words) {
+      if (words.length === 0) return '';
+      return words.map(w => w.toLowerCase()).join('.');
+    }
+
+    function toTitleCase(words) {
+      if (words.length === 0) return '';
+      // Minor words in English title case
+      const minor = new Set(['a', 'an', 'the', 'and', 'but', 'or', 'for', 'nor', 'on', 'at', 'to', 'from', 'by', 'in', 'of']);
+      return words.map((w, i) => {
+        const lower = w.toLowerCase();
+        if (i !== 0 && minor.has(lower)) {
+          return lower;
+        }
+        return lower.charAt(0).toUpperCase() + lower.slice(1);
+      }).join(' ');
+    }
+
+    function toCleanSlug(words) {
+      if (words.length === 0) return '';
+      const raw = words.map(w => w.toLowerCase().replace(/[^a-z0-9]/g, '')).filter(Boolean).join('-');
+      return raw.replace(/-+/g, '-');
+    }
+
+    // Main Update Function
+    function updateOutputs() {
+      const val = textInput.value;
+      const words = tokenize(val);
+
+      statChars.textContent = `${val.length} characters`;
+      statWords.textContent = `${words.length} words`;
+
+      if (words.length === 0) {
+        outCamel.textContent = '—';
+        outPascal.textContent = '—';
+        outSnake.textContent = '—';
+        outKebab.textContent = '—';
+        outConstant.textContent = '—';
+        outDot.textContent = '—';
+        outTitle.textContent = '—';
+        outSlug.textContent = '—';
+        return;
+      }
+
+      outCamel.textContent = toCamelCase(words);
+      outPascal.textContent = toPascalCase(words);
+      outSnake.textContent = toSnakeCase(words);
+      outKebab.textContent = toKebabCase(words);
+      outConstant.textContent = toConstantCase(words);
+      outDot.textContent = toDotCase(words);
+      outTitle.textContent = toTitleCase(words);
+      outSlug.textContent = toCleanSlug(words);
+    }
+
+    textInput.addEventListener('input', updateOutputs);
+
+    // Preset Buttons
+    document.querySelectorAll('.preset-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        textInput.value = btn.dataset.val;
+        updateOutputs();
+        textInput.focus();
+      });
+    });
+
+    btnClear.addEventListener('click', () => {
+      textInput.value = '';
+      updateOutputs();
+      textInput.focus();
+    });
+
+    // Copy Card Handler
+    document.querySelectorAll('.btn-copy-card').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const targetId = btn.dataset.target;
+        const targetEl = document.getElementById(targetId);
+        if (!targetEl || targetEl.textContent === '—') return;
+
+        const text = targetEl.textContent.trim();
+        await navigator.clipboard.writeText(text);
+
+        const label = btn.querySelector('span');
+        const origText = label.textContent;
+        label.textContent = 'Copied!';
+        btn.classList.add('bg-emerald-50', 'text-emerald-700', 'border-emerald-300');
+
+        setTimeout(() => {
+          label.textContent = origText;
+          btn.classList.remove('bg-emerald-50', 'text-emerald-700', 'border-emerald-300');
+        }, 1500);
+      });
+    });
+
+    // Initialize with default
+    textInput.value = 'user authentication token';
+    updateOutputs();
+  </script>
+</body>
+</html>
